@@ -26,7 +26,9 @@
 #include "wsi_common.h"
 #include <xf86drm.h>
 #include <xf86drmMode.h>
-
+#if __BIONIC__
+#include <bthread.h>
+#endif
 struct vk_sync;
 
 /* VK_EXT_display_control */
