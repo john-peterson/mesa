@@ -364,6 +364,7 @@ else
   # FIXME: haiku doesn't use dri, and xlib doesn't use dri, probably should
   # assert here that one of those cases has been met.
   # FIXME: illumos ends up here as well
+  # error("dri platform none")
   with_dri_platform = 'none'
 endif
 
@@ -900,10 +901,10 @@ if with_platform_android
   dep_android_mapper4 = null_dep
   if not with_android_stub
     dep_android = [
-      dependency('cutils'),
-      dependency('hardware'),
-      dependency('log'),
-      dependency('sync'),
+      # dependency('cutils'),
+      # dependency('hardware'),
+      # dependency('log'),
+      # dependency('sync'),
     ]
     if with_libbacktrace
       dep_android += dependency('backtrace')

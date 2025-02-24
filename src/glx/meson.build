@@ -1,9 +1,9 @@
 # Copyright © 2017-2019 Intel Corporation
 # SPDX-License-Identifier: MIT
 
-inc_glx = include_directories('.')
+inc_glx = include_directories('.', 'main')
 
-subdir('apple')
+# subdir('apple')
 if with_dri_platform == 'windows'
   subdir('windows')
 endif
