@@ -1032,8 +1032,11 @@ if cc.compiles('__uint128_t foo(void) { return 0; }',
 endif
 
 if cc.has_function('reallocarray')
+if not with_platform_android
    pre_args += '-DHAVE_REALLOCARRAY'
 endif
+endif
+
 if cc.has_function('fmemopen')
    pre_args += '-DHAVE_FMEMOPEN'
 endif
@@ -1403,8 +1406,13 @@ if not ['linux'].contains(host_machine.system())
   endif
 endif
 
-foreach h : ['xlocale.h', 'linux/futex.h', 'endian.h', 'dlfcn.h', 'sys/shm.h',
-             'cet.h', 'pthread_np.h', 'sys/inotify.h', 'linux/udmabuf.h']
+headers_to_detect = ['xlocale.h', 'linux/futex.h', 'endian.h', 'dlfcn.h', 'sys/shm.h',   'cet.h', 'pthread_np.h', 'sys/inotify.h', ]
+
+if not with_platform_android
+  headers_to_detect += 'linux/udmabuf.h'
+endif
+
+foreach h : headers_to_detect
   if cc.check_header(h)
     pre_args += '-DHAVE_@0@'.format(h.to_upper().underscorify())
   endif
@@ -1413,15 +1421,20 @@ endforeach
 functions_to_detect = {
   'strtof': '',
   'mkostemp': '',
-  'memfd_create': '',
   'random_r': '',
   'flock': '',
   'strtok_r': '',
-  'getrandom': '',
   'qsort_s': '',
   'posix_fallocate': '',
   'secure_getenv': '',
 }
+
+if not with_platform_android
+functions_to_detect +={ 'getrandom': '', }
+if with_platform_android and get_option('platform-sdk-version') >= 30
+functions_to_detect +={ 'memfd_create': '', }
+endif
+endif
 
 foreach f, prefix: functions_to_detect
   if cc.has_function(f, prefix: prefix)
