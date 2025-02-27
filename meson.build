@@ -1031,8 +1031,11 @@ if cc.compiles('__uint128_t foo(void) { return 0; }',
 endif
 
 if cc.has_function('reallocarray')
+if not with_platform_android
    pre_args += '-DHAVE_REALLOCARRAY'
 endif
+endif
+
 if cc.has_function('fmemopen')
    pre_args += '-DHAVE_FMEMOPEN'
 endif
@@ -1412,15 +1415,20 @@ endforeach
 functions_to_detect = {
   'strtof': '',
   'mkostemp': '',
-  'memfd_create': '',
   'random_r': '',
   'flock': '',
   'strtok_r': '',
-  'getrandom': '',
   'qsort_s': '',
   'posix_fallocate': '',
   'secure_getenv': '',
 }
+
+if not with_platform_android
+functions_to_detect +={ 'getrandom': '', }
+if with_platform_android and get_option('platform-sdk-version') >= 30
+functions_to_detect +={ 'memfd_create': '', }
+endif
+endif
 
 foreach f, prefix: functions_to_detect
   if cc.has_function(f, prefix: prefix)
