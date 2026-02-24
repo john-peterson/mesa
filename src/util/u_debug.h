@@ -104,11 +104,11 @@ struct util_debug_callback
 
 #define _util_printf_format(fmt, list) PRINTFLIKE(fmt, list)
 
-void _debug_vprintf(const char *format, va_list ap);
+void _debug_vprintf0(const char *format, va_list ap);
 
 
 static inline void
-_debug_printf(const char *format, ...)
+_debug_printf0(const char *format, ...)
 {
    va_list ap;
    va_start(ap, format);
@@ -126,6 +126,7 @@ _debug_printf(const char *format, ...)
  * - avoid outputing large strings (512 bytes is the current maximum length
  * that is guaranteed to be printed in all platforms)
  */
+
 #if !DETECT_OS_HAIKU
 static inline void
 debug_printf(const char *format, ...) _util_printf_format(1,2);
@@ -144,6 +145,29 @@ debug_printf(const char *format, ...)
 }
 #endif
 
+void
+_debug_vprintf2( const char *file,   int line*, const char *func,  const char *format, va_list ap);
+
+void
+_debug_printf2(
+      const char * file,
+			int line,
+      const char * func,
+      const char *format, ...);
+
+# define _debug_vprintf(fmt, ap)     \
+    _debug_vprintf2(               \
+          __FILE__,             \
+          __LINE__,             \
+          __FUNCTION__,         \
+          fmt, ap)
+
+# define _debug_printf(...)         \
+    _debug_printf2(               \
+          __FILE__,             \
+          __LINE__,             \
+          __FUNCTION__,         \
+          __VA_ARGS__)
 
 /*
  * ... isn't portable so we need to pass arguments in parentheses.

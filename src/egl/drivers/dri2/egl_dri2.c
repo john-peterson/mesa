@@ -895,7 +895,7 @@ dri2_initialize(_EGLDisplay *disp)
       return EGL_TRUE;
    }
 
-   loader_set_logger(_eglLog);
+   loader_set_logger(_eglLog0);
 
    switch (disp->Platform) {
    case _EGL_PLATFORM_SURFACELESS:

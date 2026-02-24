@@ -42,9 +42,44 @@
 #include <stdlib.h>
 #endif
 
+void
+_debug_printf2(
+      const char * file,
+			int line,
+      const char * func,
+      const char *format, ...)
+{
+   va_list args;
+   va_start(args, format);
+	 _debug_vprintf2(
+			file,
+			line,
+			func,
+			format,
+			args);
+   va_end(args);
+}
+
+#define MAXSTRING          4096
+void
+_debug_vprintf2(
+         const char *file, int line, const char *func,
+      const char *format, va_list args)
+{
+   // const int MAXSTRING = 4096;
+   char buf[MAXSTRING] = {'\0'};
+   char buf2[MAXSTRING] = {'\0'};
+   int ret;
+   va_start(args, format);
+   ret = vsnprintf(buf, sizeof(buf), format, args);
+   va_end(args);
+   ret = snprintf(buf2, MAXSTRING,
+ "%s:%i:%s %s", file, line, func, buf);
+   os_log_message(buf2);
+}
 
 void
-_debug_vprintf(const char *format, va_list ap)
+_debug_vprintf0(const char *format, va_list ap)
 {
    static char buf[4096] = {'\0'};
 #if DETECT_OS_WINDOWS

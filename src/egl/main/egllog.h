@@ -44,7 +44,21 @@ extern EGLint
 _eglGetLogLevel(void);
 
 extern void
-_eglLog(EGLint level, const char *fmtStr, ...);
+_eglLog2(EGLint level, const char *file,   int line, const char *func,  const char *fmtStr, ...);
+
+extern void
+_eglLog0(EGLint level, const char *fmtStr, ...);
+
+# define _eglLog(level, ...)     \
+    _eglLog2(level,               \
+            __FILE__,             \
+            __LINE__,             \
+            __FUNCTION__,         \
+            __VA_ARGS__)
+
+# define egllog(...)             \
+    _eglLog(_EGL_DEBUG,               \
+                      __VA_ARGS__)
 
 #ifdef __cplusplus
 }
