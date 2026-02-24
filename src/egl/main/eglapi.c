@@ -423,6 +423,8 @@ static EGLDisplay
 _eglGetPlatformDisplayCommon(EGLenum platform, void *native_display,
                              const EGLAttrib *attrib_list)
 {
+   egllog("");
+   debug_checkpoint_full();
    _EGLDisplay *disp;
 
    switch (platform) {
@@ -664,6 +666,7 @@ _eglComputeVersion(_EGLDisplay *disp)
 PUBLIC EGLBoolean EGLAPIENTRY
 eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 {
+   egllog("");
    _EGLDisplay *disp = _eglLockDisplay(dpy);
 
    util_cpu_trace_init();
@@ -699,6 +702,7 @@ eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
             RETURN_EGL_ERROR(disp, EGL_NOT_INITIALIZED, EGL_FALSE);
          else {
             bool success = false;
+            egllog("unset GALLIUM_DRIVER to use zink");
             if (!disp->Options.Zink && !os_get_option("GALLIUM_DRIVER")) {
                disp->Options.Zink = EGL_TRUE;
                success = _eglDriver.Initialize(disp);
@@ -786,9 +790,11 @@ eglTerminate(EGLDisplay dpy)
 PUBLIC const char *EGLAPIENTRY
 eglQueryString(EGLDisplay dpy, EGLint name)
 {
+   egllog("");
    _EGLDisplay *disp;
 
 #if !USE_LIBGLVND
+   egllog("_eglGlobal.ClientExtensionString = %s", _eglGlobal.ClientExtensionString);
    if (dpy == EGL_NO_DISPLAY && name == EGL_EXTENSIONS) {
       RETURN_EGL_SUCCESS(NULL, _eglGlobal.ClientExtensionString);
    }
@@ -835,6 +841,7 @@ PUBLIC EGLBoolean EGLAPIENTRY
 eglChooseConfig(EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs,
                 EGLint config_size, EGLint *num_config)
 {
+   egllog("");
    _EGLDisplay *disp = _eglLockDisplay(dpy);
    EGLBoolean ret;
 
@@ -871,6 +878,7 @@ PUBLIC EGLContext EGLAPIENTRY
 eglCreateContext(EGLDisplay dpy, EGLConfig config, EGLContext share_list,
                  const EGLint *attrib_list)
 {
+   egllog("");
    _EGLDisplay *disp = _eglLockDisplay(dpy);
    _EGLConfig *conf = _eglLookupConfig(config, disp);
    _EGLContext *share = _eglLookupContext(share_list, disp);

@@ -185,6 +185,7 @@ debug_get_option_should_print(void)
 
    /* We do not print value of GALLIUM_PRINT_OPTIONS intentionally. */
    return value;
+   // return false;
 }
 
 

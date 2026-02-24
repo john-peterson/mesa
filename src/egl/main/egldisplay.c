@@ -45,6 +45,7 @@
 #include "util/os_file.h"
 #include "util/os_misc.h"
 #include "util/u_atomic.h"
+#include "util/u_debug.h"
 
 #include "eglcontext.h"
 #include "eglcurrent.h"
@@ -92,6 +93,8 @@ static const struct {
 static _EGLPlatformType
 _eglGetNativePlatformFromEnv(void)
 {
+   printf("_eglGetNativePlatformFromEnv\n");
+   egllog("");
    _EGLPlatformType plat = _EGL_INVALID_PLATFORM;
    const char *plat_name;
    EGLint i;
@@ -99,7 +102,8 @@ _eglGetNativePlatformFromEnv(void)
    static_assert(ARRAY_SIZE(egl_platforms) == _EGL_NUM_PLATFORMS,
                  "Missing platform");
 
-   plat_name = os_get_option("EGL_PLATFORM");
+   plat_name = debug_get_option("EGL_PLATFORM", 0);
+   // egllog("EGL_PLATFORM = %s", plat_name);
    /* try deprecated env variable */
    if (!plat_name || !plat_name[0])
       plat_name = os_get_option("EGL_DISPLAY");
@@ -161,6 +165,7 @@ _eglNativePlatformDetectNativeDisplay(void *nativeDisplay)
 _EGLPlatformType
 _eglGetNativePlatform(void *nativeDisplay)
 {
+   egllog("");
    _EGLPlatformType detected_platform = _eglGetNativePlatformFromEnv();
    const char *detection_method = "environment";
 
@@ -173,6 +178,7 @@ _eglGetNativePlatform(void *nativeDisplay)
       detected_platform = _EGL_NATIVE_PLATFORM;
       detection_method = "build-time configuration";
    }
+   egllog("detection_method = %s", detection_method);
 
    _eglLog(_EGL_DEBUG, "Native platform type: %s (%s)",
            egl_platforms[detected_platform].name, detection_method);
@@ -522,6 +528,7 @@ _EGLDisplay *
 _eglGetXcbDisplay(xcb_connection_t *native_display,
                   const EGLAttrib *attrib_list)
 {
+   egllog("");
    _EGLDisplay *dpy;
    _EGLDevice *dev = NULL;
 
@@ -532,6 +539,7 @@ _eglGetXcbDisplay(xcb_connection_t *native_display,
       for (int i = 0; attrib_list[i] != EGL_NONE; i += 2) {
          EGLAttrib attrib = attrib_list[i];
          EGLAttrib value = attrib_list[i + 1];
+         egllog("attr =    %s, val = %s", attrib, value);
 
          switch (attrib) {
          case EGL_DEVICE_EXT:
@@ -642,6 +650,8 @@ _eglGetWaylandDisplay(struct wl_display *native_display,
 _EGLDisplay *
 _eglGetSurfacelessDisplay(void *native_display, const EGLAttrib *attrib_list)
 {
+   // debug_checkpoint_full();
+   egllog("");
    _EGLDisplay *dpy;
    _EGLDevice *dev = NULL;
 

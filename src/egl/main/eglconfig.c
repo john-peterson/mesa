@@ -766,6 +766,7 @@ EGLBoolean
 _eglChooseConfig(_EGLDisplay *disp, const EGLint *attrib_list,
                  EGLConfig *configs, EGLint config_size, EGLint *num_configs)
 {
+   egllog("");
    _EGLConfig criteria;
    EGLBoolean result;
 
