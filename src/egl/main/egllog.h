@@ -40,8 +40,21 @@ extern "C" {
 #define _EGL_INFO    2 /* just useful info */
 #define _EGL_DEBUG   3 /* useful info for debugging */
 
+# define EGLDBG(...)             \
+    EGLLOG(_EGL_DEBUG,               \
+                      __VA_ARGS__)
+# define EGLLOG(level, ...)             \
+    _eglLogExt(level,               \
+                      __FILE__,             \
+                      __LINE__,             \
+                      __FUNCTION__,         \
+                      __VA_ARGS__)
+
 extern EGLint
 _eglGetLogLevel(void);
+
+extern void
+_eglLogExt(EGLint level, const char *file, const char line*, const char *func,  const char *fmtStr, ...);
 
 extern void
 _eglLog(EGLint level, const char *fmtStr, ...);

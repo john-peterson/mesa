@@ -139,6 +139,22 @@ _eglGetLogLevel(void)
    return logging.level;
 }
 
+_eglLogExt(EGLint level, const char *file, const char line*, const char *func,  const char *fmtStr, ...)
+{
+   va_list args;
+   char msg[MAXSTRING];
+   int ret;
+
+   va_start(args, fmtStr);
+   ret = vsnprintf(msg, MAXSTRING, fmtStr, args);
+   if (ret < 0 || ret >= MAXSTRING)
+      strcpy(msg, "<message truncated>");
+   va_end(args);
+
+   _eglLog(level, msg);
+
+}
+
 /**
  * Log a message with message logger.
  * \param level one of _EGL_FATAL, _EGL_WARNING, _EGL_INFO, _EGL_DEBUG.
