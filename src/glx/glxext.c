@@ -66,7 +66,7 @@ glx_message(int level, const char *f, ...)
    int threshold = _LOADER_WARNING;
    const char *libgl_debug;
 
-   libgl_debug = getenv("LIBGL_DEBUG");
+   libgl_debug = debug_get_option("LIBGL_DEBUG", 0);
    if (libgl_debug) {
       if (strstr(libgl_debug, "quiet"))
          threshold = _LOADER_FATAL;
@@ -1036,7 +1036,7 @@ __glXInitialize(Display * dpy)
 #endif
 #if defined(HAVE_ZINK)
       if (!(glx_driver & (GLX_DRIVER_DRI2 | GLX_DRIVER_DRI3)))
-         if (kopper && !getenv("GALLIUM_DRIVER"))
+         if (kopper && !debug_get_option("GALLIUM_DRIVER", ""))
             glx_driver |= GLX_DRIVER_ZINK_INFER;
 #endif /* HAVE_ZINK */
    }

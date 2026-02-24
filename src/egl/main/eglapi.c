@@ -429,6 +429,8 @@ static EGLDisplay
 _eglGetPlatformDisplayCommon(EGLenum platform, void *native_display,
                              const EGLAttrib *attrib_list)
 {
+   egllog();
+   debug_checkpoint_full();
    _EGLDisplay *disp;
 
    switch (platform) {
@@ -671,6 +673,7 @@ _eglComputeVersion(_EGLDisplay *disp)
 PUBLIC EGLBoolean EGLAPIENTRY
 eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 {
+   egllog("");
    _EGLDisplay *disp = _eglLockDisplay(dpy);
 
    util_cpu_trace_init();
@@ -691,6 +694,7 @@ eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 
       const char *env = os_get_option("MESA_LOADER_DRIVER_OVERRIDE");
       disp->Options.Zink = env && !strcmp(env, "zink");
+      egllog("MESA_LOADER_DRIVER_OVERRIDE=%s", env);)
 
       const char *gallium_hud_env = os_get_option("GALLIUM_HUD");
       disp->Options.GalliumHudWarn =
@@ -705,6 +709,7 @@ eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
             RETURN_EGL_ERROR(disp, EGL_NOT_INITIALIZED, EGL_FALSE);
          else {
             bool success = false;
+            egllog("unset GALLIUM_DRIVER to use zink");
             if (!disp->Options.Zink && !getenv("GALLIUM_DRIVER")) {
                disp->Options.Zink = EGL_TRUE;
                disp->Options.FallbackZink = EGL_TRUE;

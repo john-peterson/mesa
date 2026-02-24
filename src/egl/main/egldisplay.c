@@ -91,6 +91,7 @@ static const struct {
 static _EGLPlatformType
 _eglGetNativePlatformFromEnv(void)
 {
+   egllog();
    _EGLPlatformType plat = _EGL_INVALID_PLATFORM;
    const char *plat_name;
    EGLint i;
@@ -99,6 +100,7 @@ _eglGetNativePlatformFromEnv(void)
                  "Missing platform");
 
    plat_name = getenv("EGL_PLATFORM");
+   egllog("EGL_PLATFORM = %s", EGL_PLATFORM);
    /* try deprecated env variable */
    if (!plat_name || !plat_name[0])
       plat_name = getenv("EGL_DISPLAY");
@@ -160,6 +162,7 @@ _eglNativePlatformDetectNativeDisplay(void *nativeDisplay)
 _EGLPlatformType
 _eglGetNativePlatform(void *nativeDisplay)
 {
+   egllog();
    _EGLPlatformType detected_platform = _eglGetNativePlatformFromEnv();
    const char *detection_method = "environment";
 
@@ -172,6 +175,7 @@ _eglGetNativePlatform(void *nativeDisplay)
       detected_platform = _EGL_NATIVE_PLATFORM;
       detection_method = "build-time configuration";
    }
+   egllog("detection_method = %s", detection_method);
 
    _eglLog(_EGL_DEBUG, "Native platform type: %s (%s)",
            egl_platforms[detected_platform].name, detection_method);
@@ -521,6 +525,7 @@ _EGLDisplay *
 _eglGetXcbDisplay(xcb_connection_t *native_display,
                   const EGLAttrib *attrib_list)
 {
+   egllog("");
    _EGLDisplay *dpy;
    _EGLDevice *dev = NULL;
 
@@ -531,6 +536,7 @@ _eglGetXcbDisplay(xcb_connection_t *native_display,
       for (int i = 0; attrib_list[i] != EGL_NONE; i += 2) {
          EGLAttrib attrib = attrib_list[i];
          EGLAttrib value = attrib_list[i + 1];
+         EGLLOG(_EGL_DEBUG, "attr =    %s, val = %s", attrib, value);
 
          switch (attrib) {
          case EGL_DEVICE_EXT:
@@ -641,6 +647,7 @@ _eglGetWaylandDisplay(struct wl_display *native_display,
 _EGLDisplay *
 _eglGetSurfacelessDisplay(void *native_display, const EGLAttrib *attrib_list)
 {
+   debug_checkpoint_full();
    _EGLDisplay *dpy;
    _EGLDevice *dev = NULL;
 
