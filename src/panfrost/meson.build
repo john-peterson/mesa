@@ -15,12 +15,12 @@ subdir('util')
 subdir('midgard')
 subdir('compiler')
 
-if with_gallium_panfrost or with_panfrost_vk
+# if with_gallium_panfrost or with_panfrost_vk
    subdir('lib')
-   subdir('clc')
-   subdir('libpan')
-   subdir('perf')
-endif
+   # subdir('clc')
+   # subdir('libpan')
+   # subdir('perf')
+# endif
 
 files_bifrost = files(
   'compiler/cmdline.c',
@@ -43,7 +43,7 @@ bifrost_compiler = executable(
   link_with : [
     libpanfrost_bifrost,
   ],
-  build_by_default : with_tools.contains('panfrost')
+  # build_by_default : with_tools.contains('panfrost')
 )
 
 if with_panfrost_vk

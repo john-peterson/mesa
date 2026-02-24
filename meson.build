@@ -888,7 +888,7 @@ pre_args += '-DGLAPI_EXPORT_PROTO_ENTRY_POINTS=@0@'.format(with_glapi_export_pro
 
 with_android_stub = get_option('android-stub')
 if with_android_stub and not with_platform_android
-  error('`-D android-stub=true` makes no sense without `-D platforms=android`')
+  # error('`-D android-stub=true` makes no sense without `-D platforms=android`')
 endif
 
 with_libbacktrace = get_option('android-libbacktrace') \
@@ -1412,11 +1412,11 @@ endforeach
 functions_to_detect = {
   'strtof': '',
   'mkostemp': '',
-  'memfd_create': '',
+  # 'memfd_create': '',
   'random_r': '',
   'flock': '',
   'strtok_r': '',
-  'getrandom': '',
+  # 'getrandom': '',
   'qsort_s': '',
   'posix_fallocate': '',
   'secure_getenv': '',

@@ -57,6 +57,7 @@ idep_compiler = declare_dependency(
   sources : [ir_expression_operation_h, builtin_types_h],
   include_directories : inc_compiler,
   link_with : libcompiler,
+  build_by_default : false,
 )
 
 subdir('nir')
