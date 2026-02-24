@@ -127,12 +127,29 @@ _eglGetLogLevel(void)
    return logging.level;
 }
 
+void
+_eglLog2(EGLint level, const char *file,   int line, const char *func,  const char *fmtStr, ...)
+{
+   va_list args;
+   char msg[MAXSTRING];
+   char msg2[MAXSTRING];
+   int ret;
+   if (!logging.initialized)
+      _eglInitLogger();
+   va_start(args, fmtStr);
+   ret = vsnprintf(msg, MAXSTRING, fmtStr, args);
+   va_end(args);
+   ret = snprintf(msg2, MAXSTRING,
+ "%s:%i:%s %s", file, line, func, msg);
+   _eglDefaultLogger(level, msg2);
+}
+
 /**
  * Log a message with message logger.
  * \param level one of _EGL_FATAL, _EGL_WARNING, _EGL_INFO, _EGL_DEBUG.
  */
 void
-_eglLog(EGLint level, const char *fmtStr, ...)
+_eglLog0(EGLint level, const char *fmtStr, ...)
 {
    va_list args;
    char msg[MAXSTRING];
