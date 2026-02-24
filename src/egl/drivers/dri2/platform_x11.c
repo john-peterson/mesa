@@ -1095,6 +1095,7 @@ disconnect:
    if (disp->PlatformDisplay == NULL)
       xcb_disconnect(dri2_dpy->conn);
 
+   EGLDBG(msg);
    return _eglError(EGL_BAD_ALLOC, msg);
 }
 

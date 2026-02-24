@@ -238,6 +238,8 @@ os_get_option_internal(const char *name, bool use_secure_getenv)
       opt = os_get_android_option(name);
    }
 #endif
+   debug_printf("%s: %s = %s\n", __func__, name,
+                opt ? opt : "(null)");
    return opt;
 }
 

@@ -423,6 +423,8 @@ static EGLDisplay
 _eglGetPlatformDisplayCommon(EGLenum platform, void *native_display,
                              const EGLAttrib *attrib_list)
 {
+   egldbg();
+   debug_checkpoint_full();
    _EGLDisplay *disp;
 
    switch (platform) {
@@ -664,6 +666,7 @@ _eglComputeVersion(_EGLDisplay *disp)
 PUBLIC EGLBoolean EGLAPIENTRY
 eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 {
+   EGLDBG("");
    _EGLDisplay *disp = _eglLockDisplay(dpy);
 
    util_cpu_trace_init();
@@ -699,6 +702,7 @@ eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
             RETURN_EGL_ERROR(disp, EGL_NOT_INITIALIZED, EGL_FALSE);
          else {
             bool success = false;
+            egldbg("unset GALLIUM_DRIVER to use zink");
             if (!disp->Options.Zink && !os_get_option("GALLIUM_DRIVER")) {
                disp->Options.Zink = EGL_TRUE;
                success = _eglDriver.Initialize(disp);
