@@ -976,7 +976,8 @@ endif
 
 # Define MESA_DEBUG to 1 for debug builds only (debugoptimized is not included on this one);
 # otherwise define MESA_DEBUG to 0
-pre_args += '-DMESA_DEBUG=@0@'.format(with_mesa_debug.to_int())
+# pre_args += '-DMESA_DEBUG=@0@'.format(with_mesa_debug.to_int())
+pre_args += '-DMESA_DEBUG=1'
 
 with_split_debug = get_option('split-debug') \
   .disable_if(not cc.has_argument('-gsplit-dwarf'),
